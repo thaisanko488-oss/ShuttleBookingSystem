@@ -1,0 +1,81 @@
+{
+  "entities": {
+    "employees": {
+      "title": "Employee",
+      "description": "Employee records for shuttle booking system",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "department": { "type": "string" },
+        "primaryRoute": { "type": "string" },
+        "phone": { "type": "string" },
+        "status": { "type": "string" },
+        "totalBookings": { "type": "number" }
+      },
+      "required": ["id", "name", "department", "primaryRoute", "status"]
+    },
+    "busRoutes": {
+      "title": "BusRoute",
+      "description": "Shuttle bus routes and schedules",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "code": { "type": "string" },
+        "name": { "type": "string" },
+        "fromLocation": { "type": "string" },
+        "toLocation": { "type": "string" },
+        "driverName": { "type": "string" },
+        "licensePlate": { "type": "string" },
+        "capacity": { "type": "number" },
+        "active": { "type": "boolean" },
+        "departureTimes": { "type": "object" }
+      },
+      "required": ["id", "code", "name", "capacity", "active"]
+    },
+    "bookings": {
+      "title": "Booking",
+      "description": "Shuttle seat bookings",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ticketNo": { "type": "string" },
+        "employeeId": { "type": "string" },
+        "employeeName": { "type": "string" },
+        "department": { "type": "string" },
+        "date": { "type": "string" },
+        "routeId": { "type": "string" },
+        "routeName": { "type": "string" },
+        "shift": { "type": "string" },
+        "departureTime": { "type": "string" },
+        "seatNumber": { "type": "number" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "ticketNo", "employeeId", "date", "routeId", "shift", "seatNumber", "status"]
+    },
+    "admins": {
+      "title": "AdminUser",
+      "description": "System administrator user accounts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "lastLogin": { "type": "string" }
+      },
+      "required": ["id", "username", "name", "role"]
+    },
+    "systemNotice": {
+      "title": "SystemNotice",
+      "description": "Public broadcast notice banner settings",
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "message": { "type": "string" }
+      },
+      "required": ["enabled", "message"]
+    }
+  }
+}
