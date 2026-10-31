@@ -76,6 +76,30 @@
         "message": { "type": "string" }
       },
       "required": ["enabled", "message"]
+    },
+    "news": {
+      "title": "NewsArticle",
+      "description": "News announcements and corporate communications with attached documents/images/PDFs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "content": { "type": "string" },
+        "author": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "pinned": { "type": "boolean" },
+        "status": { "type": "string" },
+        "attachments": { "type": "array" }
+      },
+      "required": ["id", "title", "content", "category", "author", "createdAt", "status"]
+    }
+  },
+  "firestore": {
+    "/news/{newsId}": {
+      "schema": "news",
+      "description": "Company news announcements and attached PDF or image documents"
     }
   }
 }

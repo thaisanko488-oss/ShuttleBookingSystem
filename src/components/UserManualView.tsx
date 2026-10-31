@@ -102,6 +102,85 @@ export const UserManualView: React.FC<UserManualViewProps> = ({ onBackToBooking 
               </div>
             </div>
           </div>
+
+          {/* Admin Roles & Permission Matrix Card */}
+          <div className="mt-8 pt-6 border-t border-slate-200 space-y-4">
+            <div className="flex items-center gap-2.5 text-[#0f2c59]">
+              <div className="p-2 bg-[#0f2c59]/10 rounded-xl text-[#0f2c59]">
+                <ShieldAlert className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-lg text-[#0f2c59]">คู่มือระดับสิทธิ์และการใช้งาน Admin (Admin Roles Guide)</h3>
+                <p className="text-xs text-slate-500 font-medium">คำอธิบายขอบเขตอำนาจหน้าที่ของแต่ละระดับสิทธิ์ผู้ดูแลระบบ</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 text-xs">
+              {/* Role 1: Superadmin */}
+              <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    <h4 className="font-extrabold text-slate-900 text-sm">1. Superadmin (ผู้ดูแลระบบสูงสุด)</h4>
+                  </div>
+                  <span className="px-2.5 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 font-extrabold rounded-full text-[10px]">
+                    Full Access (สิทธิ์สูงสุด)
+                  </span>
+                </div>
+                <p className="text-slate-700 leading-relaxed font-medium">
+                  • <strong>เหมาะสำหรับ:</strong> ฝ่าย IT / ผู้จัดการฝ่ายบุคคล / ผู้บริหารสูงสุดของระบบ
+                </p>
+                <div className="bg-white/80 p-2.5 rounded-xl border border-amber-200/60 space-y-1 text-slate-600">
+                  <p>✔ <strong>การจัดการผู้ดูแล:</strong> สามารถเพิ่ม แก้ไข และลบบัญชีผู้ดูแลระบบ (Admin) คนอื่นๆ ได้</p>
+                  <p>✔ <strong>การตั้งค่าระบบ:</strong> แก้ไขข้อความป้ายประกาศแจ้งเตือนหน้าแรก (System Notice)</p>
+                  <p>✔ <strong>สิทธิ์ทุกอย่าง:</strong> จัดการสายรถ, พนักงาน, การจอง และออกรายงานสรุปได้ครบถ้วน</p>
+                </div>
+              </div>
+
+              {/* Role 2: Transport Manager */}
+              <div className="p-4 bg-emerald-50/80 border border-emerald-200 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                    <h4 className="font-extrabold text-slate-900 text-sm">2. Transport Manager (ผู้จัดการสายรถรับส่ง)</h4>
+                  </div>
+                  <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold rounded-full text-[10px]">
+                    Operation Admin
+                  </span>
+                </div>
+                <p className="text-slate-700 leading-relaxed font-medium">
+                  • <strong>เหมาะสำหรับ:</strong> เจ้าหน้าที่บริหารรถรับส่ง / ฝ่ายจัดซื้อ-ขนส่ง / Admin ประจำโรงงาน
+                </p>
+                <div className="bg-white/80 p-2.5 rounded-xl border border-emerald-200/60 space-y-1 text-slate-600">
+                  <p>✔ <strong>สายรถรับส่ง:</strong> เพิ่ม, แก้ไขข้อมูล (คนขับ/ทะเบียน/รอบเวลา/ต้นทาง-ปลายทาง), เปิด/ปิด และลบสายรถ</p>
+                  <p>✔ <strong>การจองพนักงาน:</strong> ตรวจสอบรายชื่อผู้จองรถ และยกเลิกรายการจองของพนักงานได้ทันที</p>
+                  <p>✔ <strong>ข้อมูลพนักงาน:</strong> เพิ่ม/ลบ/อัปเดตข้อมูลพนักงานในระบบ</p>
+                  <p>✔ <strong>รายงาน:</strong> พิมพ์รายงานใบนัดขึ้นรถ (Passenger Manifest) และ Export รายงานการจอง</p>
+                </div>
+              </div>
+
+              {/* Role 3: Shift Coordinator */}
+              <div className="p-4 bg-blue-50/80 border border-blue-200 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                    <h4 className="font-extrabold text-slate-900 text-sm">3. Shift Coordinator (ผู้ประสานงานประจำกะ)</h4>
+                  </div>
+                  <span className="px-2.5 py-0.5 bg-blue-100 text-blue-900 border border-blue-300 font-extrabold rounded-full text-[10px]">
+                    Shift Supervisor
+                  </span>
+                </div>
+                <p className="text-slate-700 leading-relaxed font-medium">
+                  • <strong>เหมาะสำหรับ:</strong> หัวหน้ากะ / Supervisor / ผู้ตรวจเช็กรถประจำหน้างาน
+                </p>
+                <div className="bg-white/80 p-2.5 rounded-xl border border-blue-200/60 space-y-1 text-slate-600">
+                  <p>✔ <strong>เช็คชื่อพนักงาน:</strong> ตรวจสอบยอดพนักงานจองรถประจำกะกลางวัน / กะกลางคืน</p>
+                  <p>✔ <strong>ยกเลิกการจองฉุกเฉิน:</strong> ช่วยกดลบหรือยกเลิกการจองให้พนักงานกรณีแจ้งลากิจ/เปลี่ยนกะด่วน</p>
+                  <p>✔ <strong>พิมพ์ตั๋วและใบเช็คชื่อ:</strong> ออกพิมพ์เอกสารตรวจสอบสำหรับคนขับรถ</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right Column: FAQs, Image & Contact Card (5 Cols) */}
@@ -153,18 +232,23 @@ export const UserManualView: React.FC<UserManualViewProps> = ({ onBackToBooking 
               <div className="p-2 bg-white/10 rounded-xl text-white">
                 <HelpCircle className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-lg text-white">Support Hotline</h3>
+              <h3 className="font-bold text-lg text-white">Contact Support / ติดต่อฝ่ายสนับสนุน</h3>
             </div>
-            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-              Thai Sanko Transport & IT Support Department
+            <p className="text-sm font-semibold text-amber-300">
+              ฝ่ายไอที และแผนกบุคคล
             </p>
+            <div className="space-y-1.5 text-xs text-slate-200">
+              <p>📞 <strong>Phone Hotline:</strong> 035-746-488 Ext. 208</p>
+              <p>📧 <strong>Email:</strong> <a href="mailto:supawadee@thaisanko.co.th" className="text-cyan-300 hover:underline">supawadee@thaisanko.co.th</a></p>
+              <p>🏢 <strong>Office:</strong> 488 หมู่ 4 ซอย E1/3 ตำบล อุทัย อำเภออุทัย จังหวัดพระนครศรีอยุธยา 13210</p>
+            </div>
             <div className="pt-2">
               <a
                 href="tel:035746488"
-                className="inline-flex items-center gap-2 text-white font-bold text-base bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl border border-white/20 transition-all"
+                className="inline-flex items-center gap-2 text-white font-bold text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl border border-white/20 transition-all"
               >
-                <PhoneCall className="w-4 h-4 text-red-400" />
-                035-746-488
+                <PhoneCall className="w-4 h-4 text-emerald-400" />
+                035-746-488 Ext. 208
               </a>
             </div>
           </div>

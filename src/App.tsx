@@ -1,28 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import { NavView, Employee, BusRoute, Booking, AdminUser, SystemNotice } from './types';
+import { NavView, Employee, BusRoute, Booking, AdminUser, SystemNotice, NewsArticle } from './types';
 import {
   subscribeEmployees, saveEmployeeDoc, deleteEmployeeDoc,
   subscribeBusRoutes, saveBusRouteDoc, deleteBusRouteDoc,
   subscribeBookings, addBookingDoc, updateBookingStatusDoc,
-  subscribeAdmins, saveAdminDoc,
-  subscribeSystemNotice, saveSystemNoticeDoc
+  subscribeAdmins, saveAdminDoc, deleteAdminDoc,
+  subscribeSystemNotice, saveSystemNoticeDoc,
+  subscribeNews, saveNewsDoc, deleteNewsDoc
 } from './services/firebaseService';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { EmployeeBookingView } from './components/EmployeeBookingView';
+import { NewsView } from './components/NewsView';
 import { UserManualView } from './components/UserManualView';
 import { AdminLoginView } from './components/AdminLoginView';
 import { AdminDashboardView } from './components/AdminDashboardView';
-import { Bell } from 'lucide-react';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<NavView>('employee-booking');
+  // Read initial view from URL query (?view=...) or hash (#...)
+  const getInitialView = (): NavView => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const viewParam = params.get('view');
+      if (viewParam === 'news') return 'news';
+      if (viewParam === 'user-manual') return 'user-manual';
+      if (viewParam === 'admin-login') return 'admin-login';
+      if (viewParam === 'admin-dashboard') return 'admin-dashboard';
+      if (viewParam === 'employee-booking') return 'employee-booking';
+
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'news') return 'news';
+      if (hash === 'user-manual') return 'user-manual';
+      if (hash === 'admin-login') return 'admin-login';
+      if (hash === 'admin-dashboard') return 'admin-dashboard';
+    } catch {
+      // ignore
+    }
+    return 'employee-booking';
+  };
+
+  const [currentView, setCurrentView] = useState<NavView>(getInitialView);
+
+  // Sync view changes with browser history & URL search params
+  const handleSetView = (view: NavView) => {
+    setCurrentView(view);
+    try {
+      const url = new URL(window.location.href);
+      if (view === 'employee-booking') {
+        url.searchParams.delete('view');
+      } else {
+        url.searchParams.set('view', view);
+      }
+      window.history.pushState({ view }, '', url.toString());
+    } catch {
+      // ignore
+    }
+  };
+
+  // Listen to popstate for browser back/forward buttons
+  useEffect(() => {
+    const onPopState = () => {
+      setCurrentView(getInitialView());
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
 
   // Application Data State synced from Firebase Firestore
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [busRoutes, setBusRoutes] = useState<BusRoute[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [admins, setAdmins] = useState<AdminUser[]>([]);
+  const [news, setNews] = useState<NewsArticle[]>([]);
   const [systemNotice, setSystemNotice] = useState<SystemNotice>({
     enabled: true,
     message: 'กรุณาสำรองที่นั่งก่อนเวลาเดินทางอย่างน้อย 1 ชั่วโมง / Please book at least 1 hour prior to departure.'
@@ -38,6 +87,7 @@ export default function App() {
     const unsubBookings = subscribeBookings(setBookings);
     const unsubAdmins = subscribeAdmins(setAdmins);
     const unsubNotice = subscribeSystemNotice(setSystemNotice);
+    const unsubNews = subscribeNews(setNews);
 
     return () => {
       unsubEmp();
@@ -45,6 +95,7 @@ export default function App() {
       unsubBookings();
       unsubAdmins();
       unsubNotice();
+      unsubNews();
     };
   }, []);
 
@@ -57,6 +108,37 @@ export default function App() {
     await updateBookingStatusDoc(bookingId, 'Cancelled');
   };
 
+  // News handlers
+  const handleSaveNews = async (article: NewsArticle) => {
+    setNews(prev => {
+      const idx = prev.findIndex(n => n.id === article.id);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = article;
+        return copy;
+      }
+      return [article, ...prev];
+    });
+    try {
+      await saveNewsDoc(article);
+    } catch (err) {
+      console.error('Failed to save news article:', err);
+      throw err;
+    }
+  };
+
+  const handleDeleteNews = async (id: string) => {
+    // Immediately remove from state so the item disappears with 0 lag
+    setNews(prev => prev.filter(n => n.id !== id));
+    try {
+      await deleteNewsDoc(id);
+    } catch (err) {
+      console.error('Failed to delete news article:', err);
+      throw err;
+    }
+  };
+
+
   // Admin handlers
   const handleAdminLoginSuccess = (admin: AdminUser) => {
     setCurrentAdmin(admin);
@@ -65,7 +147,7 @@ export default function App() {
 
   const handleAdminLogout = () => {
     setCurrentAdmin(null);
-    setCurrentView('employee-booking');
+    handleSetView('employee-booking');
   };
 
   const handleSaveEmployee = async (emp: Employee) => {
@@ -88,6 +170,10 @@ export default function App() {
     await saveAdminDoc(admin);
   };
 
+  const handleDeleteAdmin = async (id: string) => {
+    await deleteAdminDoc(id);
+  };
+
   const handleUpdateNotice = async (notice: SystemNotice) => {
     await saveSystemNoticeDoc(notice);
   };
@@ -100,33 +186,35 @@ export default function App() {
       {/* Navigation Bar */}
       <Navbar
         currentView={currentView}
-        setCurrentView={setCurrentView}
+        setCurrentView={handleSetView}
         isAdminLoggedIn={!!currentAdmin}
         onLogoutAdmin={handleAdminLogout}
       />
 
       {/* Main View Container */}
       <main className="pt-28 pb-16 px-4 sm:px-8 max-w-7xl mx-auto w-full flex-1">
-        {systemNotice.enabled && systemNotice.message && (
-          <div className="bg-[#0f2c59]/10 border border-[#0f2c59]/30 text-[#0f2c59] px-4 py-3 rounded-2xl mb-6 flex items-center gap-3 shadow-2xs max-w-7xl mx-auto animate-in fade-in duration-300">
-            <Bell className="w-5 h-5 text-[#0f2c59] shrink-0 animate-bounce" />
-            <span className="text-xs sm:text-sm font-semibold">{systemNotice.message}</span>
-          </div>
-        )}
-
         {currentView === 'employee-booking' && (
           <EmployeeBookingView
             employees={employees}
             busRoutes={busRoutes}
             bookings={bookings}
             onAddBooking={handleAddBooking}
-            onOpenUserManual={() => setCurrentView('user-manual')}
+            onOpenUserManual={() => handleSetView('user-manual')}
+          />
+        )}
+
+        {currentView === 'news' && (
+          <NewsView
+            news={news}
+            currentAdmin={currentAdmin}
+            onSaveNews={handleSaveNews}
+            onDeleteNews={handleDeleteNews}
           />
         )}
 
         {currentView === 'user-manual' && (
           <UserManualView
-            onBackToBooking={() => setCurrentView('employee-booking')}
+            onBackToBooking={() => handleSetView('employee-booking')}
           />
         )}
 
@@ -145,6 +233,7 @@ export default function App() {
             busRoutes={busRoutes}
             admins={admins}
             systemNotice={systemNotice}
+            news={news}
             onLogout={handleAdminLogout}
             onCancelBooking={handleCancelBooking}
             onSaveEmployee={handleSaveEmployee}
@@ -152,7 +241,10 @@ export default function App() {
             onSaveBusRoute={handleSaveBusRoute}
             onDeleteBusRoute={handleDeleteBusRoute}
             onSaveAdmin={handleSaveAdmin}
+            onDeleteAdmin={handleDeleteAdmin}
             onUpdateNotice={handleUpdateNotice}
+            onSaveNews={handleSaveNews}
+            onDeleteNews={handleDeleteNews}
           />
         )}
       </main>

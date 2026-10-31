@@ -1,4 +1,5 @@
-import { Employee, BusRoute, Booking, AdminUser } from '../types';
+import { Employee, BusRoute, Booking, AdminUser, NewsArticle } from '../types';
+import { SAMPLE_ROUTE_PDF, SAMPLE_SAFETY_PDF, SAMPLE_SCHEDULE_PDF } from '../utils/pdfSample';
 
 export const INITIAL_EMPLOYEES: Employee[] = [];
 
@@ -126,9 +127,9 @@ export const INITIAL_BUS_ROUTES: BusRoute[] = [
 ];
 
 export const INITIAL_ADMINS: AdminUser[] = [
-  { id: "adm-1", username: "Admin", name: "System Admin (Superuser)", role: "Superadmin", lastLogin: "2 hours ago" },
-  { id: "adm-2", username: "chanon", name: "Chanon (Transport Manager)", role: "Manager", lastLogin: "Yesterday" },
-  { id: "adm-3", username: "it_admin", name: "IT Support Desk", role: "Coordinator", lastLogin: "3 days ago" }
+  { id: "adm-1", username: "Admin", name: "System Admin (Superuser)", role: "Superadmin", password: "035746488", lastLogin: "2 hours ago" },
+  { id: "adm-2", username: "chanon", name: "Chanon (Transport Manager)", role: "Manager", password: "0870006622", lastLogin: "Yesterday" },
+  { id: "adm-3", username: "it_admin", name: "IT Support Desk", role: "Coordinator", password: "admin123", lastLogin: "3 days ago" }
 ];
 
 export function getTodayString(): string {
@@ -213,5 +214,127 @@ export function saveAdmins(data: AdminUser[]) {
     localStorage.setItem(ADMINS_KEY, JSON.stringify(data));
   } catch (e) {
     console.error('Failed to save admins', e);
+  }
+}
+
+// Initial Sample News Announcements
+export const INITIAL_NEWS: NewsArticle[] = [
+  {
+    id: "news-001",
+    title: "ประกาศ: แจ้งปรับตารางเวลาเดินรถรับส่งสาย Route A และ Route B (เริ่ม 1 ตุลาคม 2569)",
+    category: "Route",
+    pinned: true,
+    status: "Published",
+    author: "แผนกบริหารยานพาหนะและธุรการ (Transport & Admin)",
+    createdAt: "2026-09-18T08:30:00.000Z",
+    content: `เรียน พนักงาน บริษัท ไทย ซังโค จำกัด ทุกท่าน
+
+เพื่ออำนวยความสะดวกในการเดินทางของพนักงานกะวันและสอดคล้องกับมาตรการจราจรหน้าทางเข้าโรงงาน แผนกบริหารยานพาหนะขอแจ้งปรับตารางเวลาเดินรถรับส่งพนักงาน สาย Route A และ Route B ดังนี้:
+
+1. สาย Route A (Main Gate - Plant 1):
+   - รอบเวลาปกติ กะวัน ปรับเวลาออกเป็น 17:20 น.
+   - รอบ OT กะวัน เวลา 20:10 น. (คงเดิม)
+   - กะดึก เวลา 08:10 น. (คงเดิม)
+
+2. สาย Route B (Logistics Hub - Warehouse):
+   - เพิ่มจุดจอดสำรองบริเวณหน้าอาคาร Canteen
+   - เวลาออกรถยังคงเดิมตามรอบ 17:20 และ 20:10 น.
+
+พนักงานสามารถตรวจสอบตารางเส้นทางและดาวน์โหลดเอกสารประกาศฉบับเต็ม รวมถึงแผนผังจุดจอดรถได้จากเอกสารแนบด้านล่างนี้ หากมีข้อสงสัยเพิ่มเติมกรุณาติดต่อเคาน์เตอร์ฝ่ายธุรการหรือเบอร์ภายใน 1420`,
+    attachments: [
+      {
+        id: "att-001",
+        name: "ประกาศปรับเวลาเดินรถ_RouteA_B_ต.ค.2569.pdf",
+        type: "pdf",
+        url: SAMPLE_ROUTE_PDF,
+        size: "420 KB"
+      },
+      {
+        id: "att-002",
+        name: "แผนผังจุดจอดรถและเส้นทางเดินรถ_2026.png",
+        type: "image",
+        url: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1200&auto=format&fit=crop",
+        size: "1.4 MB"
+      }
+    ]
+  },
+  {
+    id: "news-002",
+    title: "มาตรการความปลอดภัยและระเบียบปฏิบัติในการโดยสารรถรับส่งพนักงาน",
+    category: "General",
+    pinned: false,
+    status: "Published",
+    author: "คณะกรรมการความปลอดภัยฯ (JSH COMMITTEE)",
+    createdAt: "2026-09-15T09:00:00.000Z",
+    content: `ประกาศจากคณะกรรมการความปลอดภัย อาชีวอนามัย และสภาพแวดล้อมในการทำงาน (คปอ.)
+
+ขอความร่วมมือพนักงานทุกท่านที่ใช้บริการรถรับส่งปฏิบัติตามแนวทางความปลอดภัยดังต่อไปนี้:
+1. ทำการจองที่นั่งผ่านระบบล่วงหน้าอย่างน้อย 1 ชั่วโมงก่อนเวลาเดินรถ
+2. แสดงรหัสตั๋วโดยสาร (Digital E-Ticket) ให้พนักงานขับรถตรวจสอบก่อนขึ้นรถ
+3. คาดเข็มขัดนิรภัยตลอดการเดินทางทุกที่นั่ง
+4. งดรับประทานอาหารที่มีกลิ่นฉุน และรักษาความสะอาดภายในห้องโดยสาร
+5. หากจำเป็นต้องยกเลิก กรุณากดยกเลิกในระบบก่อนเวลารถออกเพื่อเปิดสิทธิ์ให้เพื่อนพนักงานท่านอื่น
+
+สามารถดาวน์โหลดคู่มือระเบียบความปลอดภัยฉบับสมบูรณ์ (Safety Manual PDF) ได้ด้านล่าง`,
+    attachments: [
+      {
+        id: "att-003",
+        name: "คู่มือความปลอดภัยการโดยสารรถรับส่ง_ThaiSanko.pdf",
+        type: "pdf",
+        url: SAMPLE_SAFETY_PDF,
+        size: "680 KB"
+      },
+      {
+        id: "att-004",
+        name: "อินโฟกราฟิก_ข้อปฏิบัติความปลอดภัยบนรถรับส่ง.jpg",
+        type: "image",
+        url: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=1200&auto=format&fit=crop",
+        size: "950 KB"
+      }
+    ]
+  },
+  {
+    id: "news-003",
+    title: "ประกาศด่วน: ตารางเดินรถรับส่งช่วงวันหยุดและแผนการซ่อมบำรุงประจำเดือน",
+    category: "Holiday",
+    pinned: false,
+    status: "Published",
+    author: "ฝ่ายทรัพยากรบุคคล (Human Resources)",
+    createdAt: "2026-09-10T14:15:00.000Z",
+    content: `แจ้งพนักงานทุกแผนกทราบ
+
+เนื่องในวันหยุดประจำบริษัทช่วงสิ้นเดือนนี้ รถรับส่งจะให้บริการเฉพาะพนักงานกะที่ได้รับมอบหมายงานทำงานล่วงเวลา (OT) เท่านั้น สำหรับพนักงานทั่วไปจะไม่มีรถรอบปกติ 17:20 น.
+
+กรุณาตรวจสอบรายชื่อสายรถที่เปิดวิ่งพิเศษในเอกสารแนบ และหัวหน้างานกรุณาส่งรายชื่อพนักงานที่ต้องมาปฏิบัติงานภายในวันพุธนี้
+
+ขอขอบคุณทุกท่านที่ให้ความร่วมมือ`,
+    attachments: [
+      {
+        id: "att-005",
+        name: "ตารางเดินรถวันหยุด_และแผนซ่อมบำรุง.pdf",
+        type: "pdf",
+        url: SAMPLE_SCHEDULE_PDF,
+        size: "350 KB"
+      }
+    ]
+  }
+];
+
+const NEWS_KEY = 'thaisanko_news_v1';
+
+export function loadNews(): NewsArticle[] {
+  try {
+    const data = localStorage.getItem(NEWS_KEY);
+    return data ? JSON.parse(data) : INITIAL_NEWS;
+  } catch {
+    return INITIAL_NEWS;
+  }
+}
+
+export function saveNews(data: NewsArticle[]) {
+  try {
+    localStorage.setItem(NEWS_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.error('Failed to save news', e);
   }
 }

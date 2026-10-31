@@ -8,11 +8,19 @@ export const Footer: React.FC = () => {
 
   return (
     <>
-      <footer className="w-full py-6 px-4 sm:px-8 flex flex-col md:flex-row justify-between items-center opacity-85 border-t border-slate-200 mt-12 bg-white/40 backdrop-blur-md">
+      <footer className="w-full py-6 px-4 sm:px-8 flex flex-col md:flex-row justify-between items-center opacity-85 border-t border-slate-200 mt-12 bg-white/40 backdrop-blur-md no-print">
         <p className="text-xs sm:text-sm text-slate-700 font-medium">
           {t('footerCopyright')}
         </p>
-        <div className="flex gap-6 mt-4 md:mt-0">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-4 md:mt-0">
+          <a
+            href="?view=news"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs sm:text-sm text-[#0e5d32] hover:text-[#0b4a28] font-bold transition-colors hover:underline"
+          >
+            ข่าวสารและประกาศ (เปิดแท็บใหม่)
+          </a>
           <button
             onClick={() => setModalContent('privacy')}
             className="text-xs sm:text-sm text-slate-500 hover:text-[#0f2c59] transition-colors font-medium hover:underline cursor-pointer"
@@ -68,14 +76,11 @@ export const Footer: React.FC = () => {
                   <PhoneCall className="w-7 h-7" />
                   <h3 className="font-bold text-xl text-[#0f2c59]">Contact Support / ติดต่อฝ่ายสนับสนุน</h3>
                 </div>
-                <p className="text-sm text-slate-700">
-                  If you encounter any issues with shuttle reservations or employee ID validation, please reach out to:
-                </p>
-                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2 text-sm text-slate-800">
-                  <p className="font-bold">ฝ่ายไอที และแผนกดูแลรถรับส่งพนักงาน (IT & Transport Dept)</p>
-                  <p>📞 <strong>Phone Hotline:</strong> 035-746-488 / 02-XXX-XXXX</p>
-                  <p>📧 <strong>Email:</strong> support@thaisanko.co.th</p>
-                  <p>🏢 <strong>Office:</strong> Admin Building - Floor 2 (Thai Sanko Co., Ltd.)</p>
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2.5 text-sm text-slate-800">
+                  <p className="font-bold text-base text-[#0f2c59]">ฝ่ายไอที และแผนกบุคคล</p>
+                  <p>📞 <strong>Phone Hotline:</strong> 035-746-488 Ext. 208</p>
+                  <p>📧 <strong>Email:</strong> <a href="mailto:supawadee@thaisanko.co.th" className="text-blue-600 hover:underline">supawadee@thaisanko.co.th</a></p>
+                  <p>🏢 <strong>Office:</strong> 488 หมู่ 4 ซอย E1/3 ตำบล อุทัย อำเภออุทัย จังหวัดพระนครศรีอยุธยา 13210</p>
                 </div>
               </div>
             )}

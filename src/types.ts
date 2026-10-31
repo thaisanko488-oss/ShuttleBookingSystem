@@ -1,8 +1,33 @@
-export type NavView = 'employee-booking' | 'user-manual' | 'admin-login' | 'admin-dashboard';
+export type NavView = 'employee-booking' | 'news' | 'user-manual' | 'admin-login' | 'admin-dashboard';
 
-export type AdminTab = 'summary' | 'employee' | 'bus' | 'settings';
+export type AdminTab = 'summary' | 'dailyReport' | 'news' | 'bookings' | 'employee' | 'bus' | 'settings';
 
 export type WorkShift = 'Day' | 'Night';
+
+export interface NewsAttachment {
+  id: string;
+  name: string;
+  type: 'image' | 'pdf';
+  url: string; // Base64 data URL or remote URL
+  size?: string; // e.g. "1.2 MB"
+  hasChunks?: boolean;
+  thumbnailUrl?: string;
+}
+
+export type NewsCategory = 'General' | 'Urgent' | 'Route' | 'Holiday' | 'Maintenance';
+
+export interface NewsArticle {
+  id: string;
+  title: string;
+  category: NewsCategory;
+  content: string;
+  author: string;
+  createdAt: string; // ISO date string
+  updatedAt?: string;
+  pinned?: boolean;
+  status: 'Published' | 'Draft';
+  attachments: NewsAttachment[];
+}
 
 export interface Employee {
   id: string;
@@ -51,7 +76,9 @@ export interface AdminUser {
   username: string;
   name: string;
   role: 'Superadmin' | 'Manager' | 'Coordinator';
+  password?: string;
   lastLogin: string;
+  createdAt?: string;
 }
 
 export interface SystemNotice {

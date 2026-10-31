@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AdminUser } from '../types';
-import { ShieldCheck, Lock, User, ArrowRight } from 'lucide-react';
+import { ShieldCheck, Lock, User, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -13,22 +13,40 @@ export const AdminLoginView: React.FC<AdminLoginViewProps> = ({ admins, onLoginS
   const { t } = useLanguage();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check credentials against standard presets or admin users
-    const valid =
-      (username === 'Admin' && password === '035746488') ||
-      (username === 'chanon' && password === '0870006622') ||
-      admins.some(a => a.username === username && password === 'admin123');
+    const userTrim = username.trim();
+    const userLower = userTrim.toLowerCase();
 
-    if (valid) {
-      const foundAdmin = admins.find(a => a.username === username) || {
+    // Check credentials against admin users or fallback presets
+    const foundAdmin = admins.find(a => a.username.trim().toLowerCase() === userLower);
+
+    let isValid = false;
+    if (foundAdmin) {
+      if (foundAdmin.password) {
+        isValid = foundAdmin.password === password;
+      } else {
+        isValid =
+          (userLower === 'admin' && password === '035746488') ||
+          (userLower === 'chanon' && password === '0870006622') ||
+          password === 'admin123';
+      }
+    } else {
+      isValid =
+        (username === 'Admin' && password === '035746488') ||
+        (username === 'chanon' && password === '0870006622');
+    }
+
+    if (isValid) {
+      const activeAdmin: AdminUser = foundAdmin || {
         id: 'adm-1',
         username: username,
         name: username === 'Admin' ? 'System Administrator' : username,
         role: username === 'Admin' ? 'Superadmin' : 'Manager',
+        password: password,
         lastLogin: 'Just now'
       };
 
@@ -37,12 +55,12 @@ export const AdminLoginView: React.FC<AdminLoginViewProps> = ({ admins, onLoginS
         position: 'top-end',
         icon: 'success',
         title: 'Access Granted',
-        text: `Welcome back, ${foundAdmin.name}`,
+        text: `Welcome back, ${activeAdmin.name}`,
         showConfirmButton: false,
         timer: 2000
       });
 
-      onLoginSuccess(foundAdmin);
+      onLoginSuccess(activeAdmin);
     } else {
       Swal.fire({
         icon: 'error',
@@ -74,7 +92,8 @@ export const AdminLoginView: React.FC<AdminLoginViewProps> = ({ admins, onLoginS
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-white/90 border-2 border-transparent rounded-xl p-3.5 pl-10 focus:ring-2 focus:ring-[#0f2c59] focus:bg-white focus:border-transparent outline-none transition-all font-semibold text-slate-800"
+                placeholder="ระบุชื่อผู้ใช้งาน"
+                className="w-full bg-white/90 border-2 border-slate-200 rounded-xl p-3.5 pl-10 focus:ring-2 focus:ring-[#0f2c59] focus:bg-white focus:border-transparent outline-none transition-all font-semibold text-slate-800"
               />
               <User className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             </div>
@@ -86,13 +105,22 @@ export const AdminLoginView: React.FC<AdminLoginViewProps> = ({ admins, onLoginS
             </label>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white/90 border-2 border-transparent rounded-xl p-3.5 pl-10 focus:ring-2 focus:ring-[#0f2c59] focus:bg-white focus:border-transparent outline-none transition-all font-semibold text-slate-800"
+                placeholder="ระบุรหัสผ่าน"
+                className="w-full bg-white/90 border-2 border-slate-200 rounded-xl p-3.5 pl-10 pr-11 focus:ring-2 focus:ring-[#0f2c59] focus:bg-white focus:border-transparent outline-none transition-all font-semibold text-slate-800"
               />
               <Lock className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                title={showPassword ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 
@@ -108,4 +136,5 @@ export const AdminLoginView: React.FC<AdminLoginViewProps> = ({ admins, onLoginS
     </section>
   );
 };
+
 

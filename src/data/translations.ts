@@ -4,8 +4,9 @@ export const translations = {
   th: {
     // Brand & Nav
     appName: "ระบบจองรถรับส่งพนักงาน",
-    companyName: "บริษัท ไทย ซันโก้ จำกัด",
+    companyName: "บริษัท ไทย ซังโค จำกัด",
     employeeBooking: "จองรถพนักงาน",
+    newsAnnouncements: "ข่าวสารและประกาศ",
     userManual: "คู่มือการใช้งาน",
     adminLogin: "เข้าสู่ระบบแอดมิน",
     adminDashboard: "แดชบอร์ดแอดมิน",
@@ -57,7 +58,7 @@ export const translations = {
 
     // User Manual
     manualTitle: "คู่มือการใช้งานระบบจองรถรับส่ง",
-    manualSubtitle: "ขั้นตอนการสำรองที่นั่งสำหรับพนักงานบริษัท ไทย ซันโก้ จำกัด",
+    manualSubtitle: "ขั้นตอนการสำรองที่นั่งสำหรับพนักงานบริษัท ไทย ซังโค จำกัด",
     step1Title: "1. กรอกรหัสพนักงาน",
     step1Desc: "ระบุรหัสพนักงาน 5 หลักของคุณ ระบบจะแสดงชื่อและแผนกให้อัตโนมัติ",
     step2Title: "2. เลือกวันที่และสายรถ",
@@ -88,8 +89,11 @@ export const translations = {
     adminPanelSubtitle: "การจัดการระบบรถรับส่ง",
     adminNavTitle: "ระบบบริหารจัดการ",
     adminNavSubtitle: "การจัดการระบบรถรับส่ง",
-    tabSummary: "รายงานสรุป",
-    tabEmployee: "ข้อมูลพนักงาน",
+    tabSummary: "รายงานสรุปภาพรวม",
+    tabDailyReport: "รายงานการจองประจำวัน",
+    tabNews: "ข่าวสารและประกาศ",
+    tabBookings: "จัดการรายการจอง",
+    tabEmployee: "รายงานรายชื่อพนักงาน",
     tabBusLine: "จัดการสายรถ",
     tabBusLines: "จัดการสายรถ",
     tabSettings: "ตั้งค่าระบบ",
@@ -183,7 +187,7 @@ export const translations = {
     closeBtn: "ปิดหน้าต่าง",
 
     // Footer
-    footerCopyright: "© 2026 บริษัท ไทย ซันโก้ จำกัด - สงวนลิขสิทธิ์ทั้งหมด",
+    footerCopyright: "© 2026 บริษัท ไทย ซังโค จำกัด - สงวนลิขสิทธิ์ทั้งหมด",
     footerSystemInfo: "ระบบจองรถรับส่งพนักงานภายในองค์กร v2.5"
   },
   en: {
@@ -191,6 +195,7 @@ export const translations = {
     appName: "Shuttle Booking System",
     companyName: "Thai Sanko Co., Ltd.",
     employeeBooking: "Employee Booking",
+    newsAnnouncements: "News & Announcements",
     userManual: "How to Book",
     adminLogin: "Admin Login",
     adminDashboard: "Admin Dashboard",
@@ -273,7 +278,10 @@ export const translations = {
     adminPanelSubtitle: "Shuttle system management",
     adminNavTitle: "Admin Control Panel",
     adminNavSubtitle: "Shuttle System Management",
-    tabSummary: "Summary Report",
+    tabSummary: "Summary Overview",
+    tabDailyReport: "Daily Booking Report",
+    tabNews: "News & Announcements",
+    tabBookings: "Manage Bookings",
     tabEmployee: "Employee Records",
     tabBusLine: "Bus Line Mgmt",
     tabBusLines: "Bus Line Mgmt",
